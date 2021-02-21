@@ -17,6 +17,7 @@ export default [
           { src: "src/index.html", dest: "public" },
           { src: "dist/index.js", dest: "public/js" },
         ],
+        hook: 'writeBundle'
       }),
     ],
   },

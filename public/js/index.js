@@ -3,7 +3,7 @@
 
     const startApp = () => {
         const el = document.querySelector('.board-app__inner');
-        el.textContent = 'app initialized';
+        el.textContent = 'App initialized';
     };
 
     startApp();
