@@ -1,0 +1,25 @@
+{
+  "name": "musisimaru-workout-kanban-board",
+  "version": "0.0.1",
+  "description": "Workout",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Musisimaru/skills-kanban-board.git"
+  },
+  "keywords": [
+    "kanban",
+    "js",
+    "htmlacademy",
+    "workout"
+  ],
+  "author": "Musisimaru",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Musisimaru/skills-kanban-board/issues"
+  },
+  "homepage": "https://github.com/Musisimaru/skills-kanban-board#readme"
+}
