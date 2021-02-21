@@ -4,7 +4,9 @@
   "description": "Workout",
   "main": "index.js",
   "scripts": {
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "start-npx": "npx http-server",
+    "start-npm": "http-server"
   },
   "repository": {
     "type": "git",
