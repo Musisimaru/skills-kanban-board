@@ -1,6 +1,4 @@
-const startApp = () => {
-    const el = document.querySelector('.board-app__inner');
-    el.textContent = 'App initialized';
-}
+import App from "./app"
 
-startApp();
+const app = new App('Канбан доска');
+app.init(`body.board-app`);

@@ -3,7 +3,14 @@
     "module": "ES6",
     "target": "ES6",
     "noImplicitAny": false,
-    "sourceMap": false
+    "sourceMap": false,
+    "baseUrl": "./src/",
+    "outDir": "dist",
+    "rootDir": "src",
+    "paths": {
+      "@components/*": ["src/components/*"],
+      "@models/*": ["src/models/*"]
+    }
   },
   "exclude": ["node_modules", "dist"]
 }
