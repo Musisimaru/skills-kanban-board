@@ -4,8 +4,7 @@
   "description": "Workout",
   "main": "index.js",
   "scripts": {
-    "build": "tsc --build",
-    "clean": "tsc --build --clean"
+    "build": "rollup -c"
   },
   "repository": {
     "type": "git",
