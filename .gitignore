@@ -350,6 +350,7 @@ MigrationBackup/
 .ionide/
 
 dist/
+public/
 
 # htmlAcademy resource
 starter-template/

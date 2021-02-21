@@ -13,11 +13,13 @@ export default [
       // Copy files to public
       copy({
         targets: [
-          { src: "src/index.html", dest: "public" },
-          { src: "src/index.html", dest: "public" },
+          { src: "html/index.html", dest: "public" },
           { src: "dist/index.js", dest: "public/js" },
+          { src: "img", dest: "public" },
+          { src: "styles/css", dest: "public" },
+          { src: "styles/fonts", dest: "public" },
         ],
-        hook: 'writeBundle'
+        hook: "writeBundle",
       }),
     ],
   },
