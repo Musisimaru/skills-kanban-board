@@ -1,0 +1,9 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+root = true
+
+[*.{ts,js,html,css}]
+charset = utf-8
+indent_style = space
+indent_size = 2
+
