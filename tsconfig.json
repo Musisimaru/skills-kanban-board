@@ -3,8 +3,7 @@
     "module": "ES6",
     "target": "ES6",
     "noImplicitAny": false,
-    "sourceMap": false,
-    "outFile": "dist/kanban-app.js"
+    "sourceMap": false
   },
   "exclude": ["node_modules", "dist"]
 }
