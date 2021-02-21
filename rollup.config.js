@@ -1,3 +1,5 @@
+import copy from "rollup-plugin-copy";
+
 export default [
   {
     input: "src/index.ts",
@@ -8,7 +10,14 @@ export default [
       },
     ],
     plugins: [
-      // todo: попозже накидаем сюда плагинов
+      // Copy files to public
+      copy({
+        targets: [
+          { src: "src/index.html", dest: "public" },
+          { src: "src/index.html", dest: "public" },
+          { src: "dist/index.js", dest: "public/js" },
+        ],
+      }),
     ],
   },
 ];
