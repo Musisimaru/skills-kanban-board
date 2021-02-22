@@ -23,7 +23,7 @@ export default class TaskboardComponent extends UIComponent {
       boardDisplayName,
       tasks
     );
-    this._element.append(component.getElement());
+    this._element.append(component.element);
   }
 
   _getTemplate(): string {

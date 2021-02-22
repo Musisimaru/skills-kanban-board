@@ -17,7 +17,7 @@ export class TaskboardGroupComponent extends UIComponent {
         const taskboardList = this._element.querySelector('.taskboard__list');
         this._data.map((task) => {
             const taskItem = new TaskboardItemComponent(task);
-            taskboardList.append(taskItem.getElement());
+            taskboardList.append(taskItem.element);
         });
     }
 

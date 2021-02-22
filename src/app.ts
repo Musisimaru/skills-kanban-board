@@ -16,11 +16,11 @@ export default class App {
     const appInner = bodyElement.querySelector('.board-app__inner');
 
     const header = new HeaderComponent(this._name);
-    const headerElement = header.getElement();
+    const headerElement = header.element;
 
     bodyElement.prepend(headerElement);
     const taskBoard = new TaskboardComponent(this._data);
-    const taskBoardElement = taskBoard.getElement();
+    const taskBoardElement = taskBoard.element;
     appInner.append(taskBoardElement);
   }
 
