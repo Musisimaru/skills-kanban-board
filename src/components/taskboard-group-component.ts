@@ -15,10 +15,18 @@ export class TaskboardGroupComponent extends UIComponent {
         
         this._element = createElement(this._getTemplate());
         const taskboardList = this._element.querySelector('.taskboard__list');
+        const emptyItem = new TaskboardItemComponent(null);
+        if(this._data.length !== 0){            
+            emptyItem.element.classList.add('hidden-block');
+        }
+
+        taskboardList.append(emptyItem.element);
+
         this._data.map((task) => {
             const taskItem = new TaskboardItemComponent(task);
             taskboardList.append(taskItem.element);
         });
+        
     }
 
     _getTemplate():string{
@@ -26,7 +34,7 @@ export class TaskboardGroupComponent extends UIComponent {
         <article class="taskboard__group taskboard__group--${this._internalName}">
           <h3 class="taskboard__group-heading taskboard__group-heading--${this._internalName}">${this._displayName}</h3>
           <div class="taskboard__list">
-          <div>
+          </div>
         </article>        
         `;
     }

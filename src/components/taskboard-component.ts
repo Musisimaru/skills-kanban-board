@@ -10,20 +10,25 @@ export default class TaskboardComponent extends UIComponent {
     super();
     this._data = tasks;
 
-    this._element = createElement(this._getTemplate());
     this.initGroup(this._data.backlog, "backlog", "Бэклог");
     this.initGroup(this._data.processing, "processing", "В процессе");
     this.initGroup(this._data.done, "done", "Готово");
-    this.initGroup(this._data.basket, "basket", "Корзина");
+
+    const basketGroup = this.initGroup(this._data.basket, "basket", "Корзина");
+
+    const basketEmptyElement = basketGroup.querySelector(".task--empty");
+    basketEmptyElement.classList.add("task--empty-trash");
+    basketEmptyElement.firstElementChild.textContent = "Корзина пуста";
   }
 
-  initGroup(tasks: Array<Task>, boardName: string, boardDisplayName) {
+  initGroup(tasks: Array<Task>, boardName: string, boardDisplayName): Element {
     const component = new TaskboardGroupComponent(
       boardName,
       boardDisplayName,
       tasks
     );
-    this._element.append(component.element);
+    this.element.append(component.element);
+    return component.element;
   }
 
   _getTemplate(): string {

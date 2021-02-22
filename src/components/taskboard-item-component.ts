@@ -5,6 +5,10 @@ import { UIComponent } from "./ui-component";
 export class TaskboardItemComponent extends UIComponent {
   _data: Task;
 
+  get isEmpty(): boolean {
+    return this._data === null;
+  }
+
   constructor(task: Task) {
     super();
     this._data = task;
@@ -13,6 +17,13 @@ export class TaskboardItemComponent extends UIComponent {
   }
 
   _getTemplate(): string {
+    if (this.isEmpty) {
+      return `
+      <div class="taskboard__item task task--empty">
+        <p>Перетащите карточку</p>
+      </div>`;
+    }
+
     return `
     <div class="taskboard__item task" draggable="true">
         <div class="task__body">
@@ -35,7 +46,9 @@ export class TaskboardItemComponent extends UIComponent {
     (<HTMLElement>this.element).addEventListener(`dragover`, function (evt) {
       evt.preventDefault();
 
-      const activeElement = document.querySelector(`.taskboard__item.task--dragged`);
+      const activeElement = document.querySelector(
+        `.taskboard__item.task--dragged`
+      );
       const isMoveable =
         activeElement !== this && this.classList.contains(`taskboard__item`);
 
@@ -53,6 +66,19 @@ export class TaskboardItemComponent extends UIComponent {
       }
 
       const tasksListElement = this.parentElement;
+      if (activeElement.parentElement !== tasksListElement) {
+        if (activeElement.parentElement.childElementCount === 2) {
+          activeElement.parentElement
+            .querySelector(".task--empty")
+            .classList.remove("hidden-block");
+        }
+        if (tasksListElement.childElementCount === 1) {
+          tasksListElement
+            .querySelector(".task--empty")
+            .classList.add("hidden-block");
+        }
+      }
+
       tasksListElement.insertBefore(activeElement, nextElement);
     });
   }
