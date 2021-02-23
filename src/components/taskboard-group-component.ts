@@ -23,6 +23,10 @@ export class TaskboardGroupComponent extends UIComponent {
     this._changedPositionHandlers.push(value);
   }
 
+  get taskboardListElement(): HTMLElement {
+    return this.element.querySelector(".taskboard__list");
+  }
+
   private invokeChangingPositionHandlers(task: Task, taskEl: HTMLElement) {
     this._changingPositionHandlers.map((handler) => {
       handler(task, taskEl);
@@ -41,35 +45,35 @@ export class TaskboardGroupComponent extends UIComponent {
     this._displayName = displayName;
 
     this._element = createElement(this._getTemplate());
-    const taskboardList = this._element.querySelector(".taskboard__list");
     const emptyItem = new TaskboardItemComponent(null);
     if (this._data.length !== 0) {
       emptyItem.element.classList.add("hidden-block");
     }
 
-    taskboardList.append(emptyItem.element);
+    this.taskboardListElement.append(emptyItem.element);
 
     this._data.map((task) => {
-      const taskItem = new TaskboardItemComponent(task);
-      taskItem.element.classList.add(`task--${this._internalName}`);
-      taskboardList.append(taskItem.element);
-
-      taskItem.onChangingPosition = (item, taskElement) => {
-        this.invokeChangingPositionHandlers(item, taskElement);
-      };
-      taskItem.onChangedPosition = (item, taskElement) => {
-        this.invokeChangedPositionHandlers(item, taskElement);
-      };
-
-      //   taskItem.onChangePosition = (changedTask, previosGroup, newGroup) => {
-      //     if (this._internalName === previosGroup) {
-      //       const index = this._data.indexOf(changedTask);
-      //       if (index > -1) {
-      //         this._data.splice(index, 1);
-      //       }
-      //     }
-      //   };
+      this.addTaskElement(task);
     });
+  }
+
+  private addTaskElement(task: Task) {
+    const taskItem = new TaskboardItemComponent(task);
+    taskItem.element.classList.add(`task--${this._internalName}`);
+    this.taskboardListElement.append(taskItem.element);
+
+    taskItem.onChangingPosition = (item, taskElement) => {
+      this.invokeChangingPositionHandlers(item, taskElement);
+    };
+
+    taskItem.onChangedPosition = (item, taskElement) => {
+      this.invokeChangedPositionHandlers(item, taskElement);
+    };
+  }
+
+  public addTask(task: Task) {
+    this._data.push(task);
+    this.addTaskElement(task);
   }
 
   _getTemplate(): string {
