@@ -26,6 +26,14 @@ export class TaskboardItemComponent extends UIComponent {
     this._changedPositionHandlers.push(value);
   }
 
+  get taskInputElement(): HTMLInputElement {
+    return this.element.querySelector("input.task__input") as HTMLInputElement;
+  }
+
+  get taskEditButton(): HTMLButtonElement {
+    return this.element.querySelector("button.task__edit") as HTMLButtonElement;
+  }
+
   private invokeChangingPositionHandlers() {
     this._changingPositionHandlers.map((handler) => {
       handler(this._dataSource, <HTMLElement>this.element);
@@ -128,16 +136,13 @@ export class TaskboardItemComponent extends UIComponent {
       tasksListElement.insertBefore(activeElement, nextElement);
     });
 
-    const taskInputElement = this.element.querySelector(
-      "input.task__input"
-    ) as HTMLInputElement;
-    if (taskInputElement) {
-      taskInputElement.addEventListener("change", (evt) => {
+    if (this.taskInputElement) {
+      this.taskInputElement.addEventListener("change", (evt) => {
         this._data.name = (<HTMLInputElement>evt.target).value;
         console.debug(`input changed ${this._data.name}`);
       });
 
-      taskInputElement.addEventListener("keyup", (evt) => {
+      this.taskInputElement.addEventListener("keyup", (evt) => {
         if (evt.key === "Escape" || evt.key === "Esc") {
           console.debug(`Press Esc`);
           this.toggleEditState(<HTMLElement>this.element);
@@ -148,21 +153,23 @@ export class TaskboardItemComponent extends UIComponent {
       });
     }
 
-    const taskEditButton = this.element.querySelector(
-      "button.task__edit"
-    ) as HTMLButtonElement;
-    if (taskEditButton) {
-      taskEditButton.addEventListener("click", (evt) => {
-        this.toggleEditState(<HTMLElement>this.element);
+    if (this.taskEditButton) {
+      this.taskEditButton.addEventListener("click", (evt) => {
+        if (this.toggleEditState(<HTMLElement>this.element)) {
+          this.taskInputElement.focus();
+          this.taskInputElement.select();
+        }
       });
     }
   }
 
-  toggleEditState(elem: HTMLElement) {
+  toggleEditState(elem: HTMLElement): boolean {
     if (elem.classList.contains("task--active")) {
       elem.classList.remove("task--active");
+      return false;
     } else {
       elem.classList.add("task--active");
+      return true;
     }
   }
 
@@ -189,7 +196,7 @@ export class TaskboardItemComponent extends UIComponent {
       },
       get: (target, property, reciever) => {
         return target[property];
-      }
+      },
     });
 
     this._data = dataBinding;
