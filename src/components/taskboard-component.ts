@@ -10,6 +10,7 @@ import { UIComponent } from "./ui-component";
 
 export default class TaskboardComponent extends UIComponent {
   _data: TasksBase;
+  _groups: { [key: string]: TaskboardGroupComponent } = {};
   constructor(tasks: TasksBase) {
     super();
     this._data = tasks;
@@ -20,12 +21,18 @@ export default class TaskboardComponent extends UIComponent {
 
     const basketGroup = this.initGroup(this._data.basket, "basket", "Корзина");
 
-    const basketEmptyElement = basketGroup.querySelector(".task--empty");
+    const basketEmptyElement = basketGroup.element.querySelector(
+      ".task--empty"
+    );
     basketEmptyElement.classList.add("task--empty-trash");
     basketEmptyElement.firstElementChild.textContent = "Корзина пуста";
   }
 
-  initGroup(tasks: Array<Task>, boardName: string, boardDisplayName): Element {
+  initGroup(
+    tasks: Array<Task>,
+    boardName: string,
+    boardDisplayName
+  ): TaskboardGroupComponent {
     const component = new TaskboardGroupComponent(
       boardName,
       boardDisplayName,
@@ -34,8 +41,12 @@ export default class TaskboardComponent extends UIComponent {
     this.element.append(component.element);
     component.onChangingPosition = this.onChanging;
     component.onChangedPosition = this.onChanged;
+    this._groups[boardName] = component;
+    return component;
+  }
 
-    return component.element;
+  addNewTask(createdTask: Task) {
+    this._groups['backlog'].addTask(createdTask);
   }
 
   onChanging: ChangingPositionHandler = (task, taskElement) => {

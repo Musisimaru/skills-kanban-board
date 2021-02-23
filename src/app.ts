@@ -1,3 +1,4 @@
+import AddTaskFormComponent from "components/form_add-task-component";
 import TaskboardComponent from "components/taskboard-component";
 import { tasks } from "data";
 import TasksBase from "models/tasksBase";
@@ -18,10 +19,18 @@ export default class App {
     const header = new HeaderComponent(this._name);
     const headerElement = header.element;
 
+
     bodyElement.prepend(headerElement);
     const taskBoard = new TaskboardComponent(this._data);
     const taskBoardElement = taskBoard.element;
     appInner.append(taskBoardElement);
+
+    const addForm = new AddTaskFormComponent();
+    addForm.onCreatedTask = (createdTask) =>{
+      taskBoard.addNewTask(createdTask);
+    }
+    appInner.prepend(addForm.element);
+    
   }
 
   public getData(): TasksBase{
