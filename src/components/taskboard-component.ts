@@ -1,6 +1,7 @@
 import Task from "models/task";
 import TasksBase from "models/tasksBase";
 import { createElement, getTaskGroup } from "utils";
+import TaskboardBacketGroupComponent from "./taskboard-group-basket-component";
 import { TaskboardGroupComponent } from "./taskboard-group-component";
 import {
   ChangedPositionHandler,
@@ -15,33 +16,24 @@ export default class TaskboardComponent extends UIComponent {
     super();
     this._data = tasks;
 
-    this.initGroup(this._data.backlog, "backlog", "Бэклог");
-    this.initGroup(this._data.processing, "processing", "В процессе");
-    this.initGroup(this._data.done, "done", "Готово");
+    this.initGroup(new TaskboardGroupComponent("backlog","Бэклог",this._data.backlog));
+    this.initGroup(new TaskboardGroupComponent("processing", "В процессе", this._data.processing));
+    this.initGroup(new TaskboardGroupComponent("done", "Готово", this._data.done));
 
-    const basketGroup = this.initGroup(this._data.basket, "basket", "Корзина");
-
-    const basketEmptyElement = basketGroup.element.querySelector(
-      ".task--empty"
-    );
-    basketEmptyElement.classList.add("task--empty-trash");
-    basketEmptyElement.firstElementChild.textContent = "Корзина пуста";
+    const basketGroup = this.initGroup(new TaskboardBacketGroupComponent("basket", "Корзина", this._data.basket));
   }
 
   initGroup(
-    tasks: Array<Task>,
-    boardName: string,
-    boardDisplayName
+    component:TaskboardGroupComponent
+    // tasks: Array<Task>,
+    // boardName: string,
+    // boardDisplayName
   ): TaskboardGroupComponent {
-    const component = new TaskboardGroupComponent(
-      boardName,
-      boardDisplayName,
-      tasks
-    );
+
     this.element.append(component.element);
     component.onChangingPosition = this.onChanging;
     component.onChangedPosition = this.onChanged;
-    this._groups[boardName] = component;
+    this._groups[component.internalName] = component;
     return component;
   }
 

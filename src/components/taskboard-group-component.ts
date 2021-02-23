@@ -12,6 +12,8 @@ export class TaskboardGroupComponent extends UIComponent {
   _internalName: string;
   _displayName: string;
 
+  _emptyTaskItem: TaskboardItemComponent;
+
   _changingPositionHandlers: Array<ChangingPositionHandler> = [];
   _changedPositionHandlers: Array<ChangedPositionHandler> = [];
 
@@ -21,6 +23,10 @@ export class TaskboardGroupComponent extends UIComponent {
 
   set onChangedPosition(value: ChangedPositionHandler) {
     this._changedPositionHandlers.push(value);
+  }
+
+  get internalName(): string{
+    return this._internalName;
   }
 
   get taskboardListElement(): HTMLElement {
@@ -38,6 +44,17 @@ export class TaskboardGroupComponent extends UIComponent {
     });
   }
 
+  get emptyTaskElement(): HTMLElement {
+    return <HTMLElement>this._emptyTaskItem.element;
+  }
+
+  showEptyTask(){
+    this.emptyTaskElement.classList.remove("hidden-block");
+  }
+  hideEmptyTask(){
+    this.emptyTaskElement.classList.add("hidden-block");
+  }
+
   constructor(internalName: string, displayName: string, tasks: Array<Task>) {
     super();
     this._data = tasks;
@@ -45,12 +62,12 @@ export class TaskboardGroupComponent extends UIComponent {
     this._displayName = displayName;
 
     this._element = createElement(this._getTemplate());
-    const emptyItem = new TaskboardItemComponent(null);
+    this._emptyTaskItem = new TaskboardItemComponent(null);
     if (this._data.length !== 0) {
-      emptyItem.element.classList.add("hidden-block");
+      this.hideEmptyTask();
     }
 
-    this.taskboardListElement.append(emptyItem.element);
+    this.taskboardListElement.append(this.emptyTaskElement);
 
     this._data.map((task) => {
       this.addTaskElement(task);

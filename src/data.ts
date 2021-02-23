@@ -14,3 +14,9 @@ export const tasks: TasksBase = {
   done: [],
   basket: [{ name: "Test Task 3-1" }],
 };
+
+window['data'] = {
+  getData: () => {
+    return tasks;
+  }
+}
