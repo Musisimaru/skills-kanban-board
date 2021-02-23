@@ -1,5 +1,5 @@
 import Task from "models/task";
-import { getNextElement } from "utils";
+import { getNextElement, getTaskGroup } from "utils";
 import { UIComponent } from "./ui-component";
 
 export class TaskboardItemComponent extends UIComponent {
@@ -65,7 +65,9 @@ export class TaskboardItemComponent extends UIComponent {
         return;
       }
 
+
       const tasksListElement = this.parentElement;
+
       if (activeElement.parentElement !== tasksListElement) {
         if (activeElement.parentElement.childElementCount === 2) {
           activeElement.parentElement
@@ -79,6 +81,9 @@ export class TaskboardItemComponent extends UIComponent {
         }
       }
 
+      const nextTaskGroup = getTaskGroup(tasksListElement);
+      const activeTaskGroup = getTaskGroup(activeElement.parentElement);
+      activeElement.classList.replace(`task--${activeTaskGroup}`, `task--${nextTaskGroup}`)      
       tasksListElement.insertBefore(activeElement, nextElement);
     });
   }

@@ -24,6 +24,7 @@ export class TaskboardGroupComponent extends UIComponent {
 
         this._data.map((task) => {
             const taskItem = new TaskboardItemComponent(task);
+            taskItem.element.classList.add(`task--${this._internalName}`);
             taskboardList.append(taskItem.element);
         });
         

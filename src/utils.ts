@@ -19,3 +19,14 @@ export const getNextElement = (cursorPosition: number, currentElement: Element):
 
   return nextElement;
 };
+
+export const getTaskGroup = (tasksListElement: HTMLElement): string => {
+  const count = tasksListElement.parentElement.classList.length;
+  for (let index = 0; index < count; index++) {
+    const className = tasksListElement.parentElement.classList[index];
+    if(className.indexOf('taskboard__group--') !== -1){
+      return className.replace('taskboard__group--', '');
+    }
+  }
+  return null;
+};
