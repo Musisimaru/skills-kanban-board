@@ -10,7 +10,7 @@ export default class HeaderComponent extends UIComponent {
     this._name = name;
   }
 
-  _getTemplate(): string {
+  get template(): string {
     return `<header class="board-app__header">
         <div class="board-app__inner">
           <h1>${this._name}</h1>

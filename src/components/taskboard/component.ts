@@ -1,10 +1,20 @@
 import { TaskboardBacketGroup, TaskboardGroup } from "components/task-group";
-import { ChangedPositionHandler, ChangingPositionHandler } from "components/task-item";
+import {
+  ChangedPositionHandler,
+  ChangingPositionHandler,
+} from "components/task-item";
 import Task from "models/task";
 import TasksBase from "models/tasksBase";
 import { getTaskGroup } from "utils";
 
 import { UIComponent } from "../ui-component";
+
+enum GroupDisplayNames {
+  "backlog" = "Бэклог",
+  "processing" = "В процессе",
+  "done" = "Готово",
+  "basket" = "Корзина",
+}
 
 export default class TaskboardComponent extends UIComponent {
   _data: TasksBase;
@@ -13,15 +23,15 @@ export default class TaskboardComponent extends UIComponent {
     super();
     this._data = tasks;
 
-    this.initGroup(new TaskboardGroup("backlog", "Бэклог", this._data.backlog));
-    this.initGroup(
-      new TaskboardGroup("processing", "В процессе", this._data.processing)
-    );
-    this.initGroup(new TaskboardGroup("done", "Готово", this._data.done));
-
-    const basketGroup = this.initGroup(
-      new TaskboardBacketGroup("basket", "Корзина", this._data.basket)
-    );
+    Object.keys(this._data).map((internalName) => {
+      const tasks = this._data[internalName];
+      const label = GroupDisplayNames[internalName];
+      const component =
+        internalName === "basket"
+          ? new TaskboardBacketGroup(internalName, label, tasks)
+          : new TaskboardGroup(internalName, label, tasks);
+      this.initGroup(component);
+    });
   }
 
   initGroup(component: TaskboardGroup): TaskboardGroup {
@@ -54,7 +64,7 @@ export default class TaskboardComponent extends UIComponent {
     taskArr.splice(index, 0, task);
   };
 
-  _getTemplate(): string {
+  get template(): string {
     return `
         <section class="taskboard">
             <h2 class="visually-hidden">Ваши задачи:</h2>

@@ -71,7 +71,6 @@ export default class TaskboardGroupComponent extends UIComponent {
     this._internalName = internalName;
     this._displayName = displayName;
 
-    this._element = createElement(this._getTemplate());
     this.addEmptyTask();
 
     this._data.map((task) => {
@@ -98,7 +97,7 @@ export default class TaskboardGroupComponent extends UIComponent {
     this.addTaskElement(task);
   }
 
-  _getTemplate(): string {
+  get template(): string {
     return `
         <article class="taskboard__group taskboard__group--${this._internalName}">
           <h3 class="taskboard__group-heading taskboard__group-heading--${this._internalName}">${this._displayName}</h3>

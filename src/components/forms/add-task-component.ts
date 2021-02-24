@@ -43,7 +43,7 @@ export default class AddTaskFormComponent extends UIComponent {
     });
   }
 
-  _getTemplate(): string {
+  get template(): string {
     return `
         <section class="add-task">
         <h2 class="visually-hidden">Добавить задачу</h2>
