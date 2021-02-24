@@ -6,7 +6,7 @@ import { TaskboardGroupComponent } from "./taskboard-group-component";
 import {
   ChangedPositionHandler,
   ChangingPositionHandler,
-} from "./taskboard-item-component";
+} from "./task-item/component";
 import { UIComponent } from "./ui-component";
 
 export default class TaskboardComponent extends UIComponent {

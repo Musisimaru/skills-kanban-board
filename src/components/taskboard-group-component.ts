@@ -4,7 +4,8 @@ import {
   ChangedPositionHandler,
   ChangingPositionHandler,
   TaskboardItemComponent,
-} from "./taskboard-item-component";
+} from "./task-item/component";
+import EmptyTaskComponent from "./task-item/empty-component";
 import { UIComponent } from "./ui-component";
 
 export class TaskboardGroupComponent extends UIComponent {
@@ -55,6 +56,14 @@ export class TaskboardGroupComponent extends UIComponent {
     this.emptyTaskElement.classList.add("hidden-block");
   }
 
+  addEmptyTask() {
+    this._emptyTaskItem = new EmptyTaskComponent();
+    if (this._data.length !== 0) {
+      this.hideEmptyTask();
+    }
+    this.taskboardListElement.append(this.emptyTaskElement);    
+  }
+
   constructor(internalName: string, displayName: string, tasks: Array<Task>) {
     super();
     this._data = tasks;
@@ -62,12 +71,7 @@ export class TaskboardGroupComponent extends UIComponent {
     this._displayName = displayName;
 
     this._element = createElement(this._getTemplate());
-    this._emptyTaskItem = new TaskboardItemComponent(null);
-    if (this._data.length !== 0) {
-      this.hideEmptyTask();
-    }
-
-    this.taskboardListElement.append(this.emptyTaskElement);
+    this.addEmptyTask();
 
     this._data.map((task) => {
       this.addTaskElement(task);

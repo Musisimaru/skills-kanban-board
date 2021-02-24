@@ -1,6 +1,6 @@
 import Task from "models/task";
 import { getNextElement, getTaskGroup } from "utils";
-import { UIComponent } from "./ui-component";
+import { UIComponent } from "../ui-component";
 
 export type ChangingPositionHandler = (
   movingTask: Task,
@@ -58,13 +58,6 @@ export class TaskboardItemComponent extends UIComponent {
   }
 
   _getTemplate(): string {
-    if (this.isEmpty) {
-      return `
-      <div class="taskboard__item task task--empty">
-        <p>Перетащите карточку</p>
-      </div>`;
-    }
-
     return `
     <div class="taskboard__item task" draggable="true">
         <div class="task__body">

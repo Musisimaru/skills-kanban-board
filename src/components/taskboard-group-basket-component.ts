@@ -1,4 +1,5 @@
 import Task from "models/task";
+import EmptyTrashTaskComponent from "./task-item/empty-trash-component";
 import { TaskboardGroupComponent } from "./taskboard-group-component";
 
 export type ClearedTasksHandler = () => void;
@@ -16,11 +17,19 @@ export default class TaskboardBacketGroupComponent extends TaskboardGroupCompone
     });
   }
 
+  addEmptyTask() {
+    this._emptyTaskItem = new EmptyTrashTaskComponent();
+    if (this._data.length !== 0) {
+      this.hideEmptyTask();
+    }
+    this.taskboardListElement.append(this.emptyTaskElement);    
+  }
+
   constructor(internalName: string, displayName: string, tasks: Array<Task>) {
     super(internalName, displayName, tasks);
 
-    this.emptyTaskElement.classList.add("task--empty-trash");
-    this.emptyTaskElement.firstElementChild.textContent = "Корзина пуста";
+    // this.emptyTaskElement.classList.add("task--empty-trash");
+    // this.emptyTaskElement.firstElementChild.textContent = "Корзина пуста";
 
     this.buttonClearElement.addEventListener("click", (evt) => {
       evt.preventDefault();
