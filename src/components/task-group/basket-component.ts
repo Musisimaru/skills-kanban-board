@@ -71,7 +71,7 @@ export default class TaskboardBacketGroupComponent extends TaskboardGroupCompone
     return this.element.querySelector("button.button--clear");
   }
 
-  _getTemplate(): string {
+  get template(): string {
     return `
     <article class="taskboard__group taskboard__group--${this._internalName}">
         <h3 class="taskboard__group-heading taskboard__group-heading--${this._internalName}">${this._displayName}</h3>

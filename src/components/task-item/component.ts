@@ -57,7 +57,7 @@ export default class TaskboardItemComponent extends UIComponent {
     this.initDataBindings();
   }
 
-  _getTemplate(): string {
+  get template(): string {
     return `
     <div class="taskboard__item task" draggable="true">
         <div class="task__body">
