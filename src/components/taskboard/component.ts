@@ -1,35 +1,30 @@
+import { TaskboardBacketGroup, TaskboardGroup } from "components/task-group";
+import { ChangedPositionHandler, ChangingPositionHandler } from "components/task-item";
 import Task from "models/task";
 import TasksBase from "models/tasksBase";
-import { createElement, getTaskGroup } from "utils";
-import TaskboardBacketGroupComponent from "./taskboard-group-basket-component";
-import { TaskboardGroupComponent } from "./taskboard-group-component";
-import {
-  ChangedPositionHandler,
-  ChangingPositionHandler,
-} from "./task-item/component";
-import { UIComponent } from "./ui-component";
+import { getTaskGroup } from "utils";
+
+import { UIComponent } from "../ui-component";
 
 export default class TaskboardComponent extends UIComponent {
   _data: TasksBase;
-  _groups: { [key: string]: TaskboardGroupComponent } = {};
+  _groups: { [key: string]: TaskboardGroup } = {};
   constructor(tasks: TasksBase) {
     super();
     this._data = tasks;
 
-    this.initGroup(new TaskboardGroupComponent("backlog","Бэклог",this._data.backlog));
-    this.initGroup(new TaskboardGroupComponent("processing", "В процессе", this._data.processing));
-    this.initGroup(new TaskboardGroupComponent("done", "Готово", this._data.done));
+    this.initGroup(new TaskboardGroup("backlog", "Бэклог", this._data.backlog));
+    this.initGroup(
+      new TaskboardGroup("processing", "В процессе", this._data.processing)
+    );
+    this.initGroup(new TaskboardGroup("done", "Готово", this._data.done));
 
-    const basketGroup = this.initGroup(new TaskboardBacketGroupComponent("basket", "Корзина", this._data.basket));
+    const basketGroup = this.initGroup(
+      new TaskboardBacketGroup("basket", "Корзина", this._data.basket)
+    );
   }
 
-  initGroup(
-    component:TaskboardGroupComponent
-    // tasks: Array<Task>,
-    // boardName: string,
-    // boardDisplayName
-  ): TaskboardGroupComponent {
-
+  initGroup(component: TaskboardGroup): TaskboardGroup {
     this.element.append(component.element);
     component.onChangingPosition = this.onChanging;
     component.onChangedPosition = this.onChanged;
@@ -38,7 +33,7 @@ export default class TaskboardComponent extends UIComponent {
   }
 
   addNewTask(createdTask: Task) {
-    this._groups['backlog'].addTask(createdTask);
+    this._groups["backlog"].addTask(createdTask);
   }
 
   onChanging: ChangingPositionHandler = (task, taskElement) => {

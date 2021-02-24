@@ -1,5 +1,5 @@
-import AddTaskFormComponent from "components/form_add-task-component";
-import TaskboardComponent from "components/taskboard-component";
+import AddTaskFormComponent from "components/forms/add-task-component";
+import { Taskboard } from "components/taskboard";
 import { tasks } from "data";
 import TasksBase from "models/tasksBase";
 import HeaderComponent from "./components/header-component";
@@ -21,7 +21,7 @@ export default class App {
 
 
     bodyElement.prepend(headerElement);
-    const taskBoard = new TaskboardComponent(this._data);
+    const taskBoard = new Taskboard(this._data);
     const taskBoardElement = taskBoard.element;
     appInner.append(taskBoardElement);
 

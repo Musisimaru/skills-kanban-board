@@ -1,5 +1,4 @@
-import { TaskboardItemComponent } from "./component";
-import EmptyTaskComponent from "./empty-component";
+import TaskboardItemComponent from "./component";
 
 export default class EmptyTrashTaskComponent extends TaskboardItemComponent{
 

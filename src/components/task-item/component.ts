@@ -11,7 +11,7 @@ export type ChangedPositionHandler = (
   movedElement: HTMLElement
 ) => void;
 
-export class TaskboardItemComponent extends UIComponent {
+export default class TaskboardItemComponent extends UIComponent {
   _dataSource: Task;
   _data: Task;
 

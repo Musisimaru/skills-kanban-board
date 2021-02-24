@@ -1,6 +1,6 @@
+import { EmptyTrashTask } from "components/task-item";
 import Task from "models/task";
-import EmptyTrashTaskComponent from "./task-item/empty-trash-component";
-import { TaskboardGroupComponent } from "./taskboard-group-component";
+import TaskboardGroupComponent from "./component";
 
 export type ClearedTasksHandler = () => void;
 
@@ -18,7 +18,7 @@ export default class TaskboardBacketGroupComponent extends TaskboardGroupCompone
   }
 
   addEmptyTask() {
-    this._emptyTaskItem = new EmptyTrashTaskComponent();
+    this._emptyTaskItem = new EmptyTrashTask();
     if (this._data.length !== 0) {
       this.hideEmptyTask();
     }

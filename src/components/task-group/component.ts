@@ -1,19 +1,20 @@
-import Task from "models/task";
-import { createElement } from "utils";
 import {
   ChangedPositionHandler,
   ChangingPositionHandler,
-  TaskboardItemComponent,
-} from "./task-item/component";
-import EmptyTaskComponent from "./task-item/empty-component";
-import { UIComponent } from "./ui-component";
+  EmptyTask,
+  TaskboardItem,
+} from "components/task-item";
+import Task from "models/task";
+import { createElement } from "utils";
 
-export class TaskboardGroupComponent extends UIComponent {
+import { UIComponent } from "../ui-component";
+
+export default class TaskboardGroupComponent extends UIComponent {
   _data: Array<Task>;
   _internalName: string;
   _displayName: string;
 
-  _emptyTaskItem: TaskboardItemComponent;
+  _emptyTaskItem: TaskboardItem;
 
   _changingPositionHandlers: Array<ChangingPositionHandler> = [];
   _changedPositionHandlers: Array<ChangedPositionHandler> = [];
@@ -26,7 +27,7 @@ export class TaskboardGroupComponent extends UIComponent {
     this._changedPositionHandlers.push(value);
   }
 
-  get internalName(): string{
+  get internalName(): string {
     return this._internalName;
   }
 
@@ -49,19 +50,19 @@ export class TaskboardGroupComponent extends UIComponent {
     return <HTMLElement>this._emptyTaskItem.element;
   }
 
-  showEptyTask(){
+  showEptyTask() {
     this.emptyTaskElement.classList.remove("hidden-block");
   }
-  hideEmptyTask(){
+  hideEmptyTask() {
     this.emptyTaskElement.classList.add("hidden-block");
   }
 
   addEmptyTask() {
-    this._emptyTaskItem = new EmptyTaskComponent();
+    this._emptyTaskItem = new EmptyTask();
     if (this._data.length !== 0) {
       this.hideEmptyTask();
     }
-    this.taskboardListElement.append(this.emptyTaskElement);    
+    this.taskboardListElement.append(this.emptyTaskElement);
   }
 
   constructor(internalName: string, displayName: string, tasks: Array<Task>) {
@@ -79,7 +80,7 @@ export class TaskboardGroupComponent extends UIComponent {
   }
 
   private addTaskElement(task: Task) {
-    const taskItem = new TaskboardItemComponent(task);
+    const taskItem = new TaskboardItem(task);
     taskItem.element.classList.add(`task--${this._internalName}`);
     this.taskboardListElement.append(taskItem.element);
 
