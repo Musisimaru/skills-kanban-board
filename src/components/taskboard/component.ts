@@ -1,11 +1,12 @@
 import { TaskboardBacketGroup, TaskboardGroup } from "components/task-group";
+import { GroupDragAndDropArguments, GroupDragAndDropHandler } from "components/task-group/component";
 import {
   ChangedPositionHandler,
   ChangingPositionHandler,
 } from "components/task-item";
 import Task from "models/task";
 import TasksBase from "models/tasksBase";
-import { getTaskGroup } from "utils";
+import { getNextElement, getTaskGroup } from "utils";
 
 import { UIComponent } from "../ui-component";
 
@@ -38,6 +39,7 @@ export default class TaskboardComponent extends UIComponent {
     this.element.append(component.element);
     component.onChangingPosition = this.onChanging;
     component.onChangedPosition = this.onChanged;
+    component.onTasksDragAndDrop = this.onTaskDragAndDrop;
     this._groups[component.internalName] = component;
     return component;
   }
@@ -62,6 +64,43 @@ export default class TaskboardComponent extends UIComponent {
     const index =
       Array.from(taskElement.parentNode.children).indexOf(taskElement) - 1;
     taskArr.splice(index, 0, task);
+  };
+
+  onTaskDragAndDrop: GroupDragAndDropHandler = (evtArgs: GroupDragAndDropArguments) => {
+    const {draggedElement, movingElement} = evtArgs;
+    const nextElement = getNextElement(evtArgs.event.clientY, draggedElement);
+
+    if (
+      (nextElement && movingElement === nextElement.previousElementSibling) ||
+      movingElement === nextElement
+    ) {
+      return;
+    }
+
+    const tasksListElement = draggedElement.parentElement;
+
+    if (movingElement.parentElement !== tasksListElement) {
+      // show empty in current container
+      if (movingElement.parentElement.childElementCount === 2) {
+        movingElement.parentElement
+          .querySelector(".task--empty")
+          .classList.remove("hidden-block");
+      }
+      // hide empty in new container
+      if (tasksListElement.childElementCount === 1) {
+        tasksListElement
+          .querySelector(".task--empty")
+          .classList.add("hidden-block");
+      }
+
+      const nextTaskGroup = getTaskGroup(tasksListElement);
+      const activeTaskGroup = getTaskGroup(movingElement.parentElement);
+      movingElement.classList.replace(
+        `task--${activeTaskGroup}`,
+        `task--${nextTaskGroup}`
+      );
+    }
+    tasksListElement.insertBefore(movingElement, nextElement);    
   };
 
   get template(): string {

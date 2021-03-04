@@ -19,10 +19,18 @@ export default class TaskboardBacketGroupComponent extends TaskboardGroupCompone
 
   addEmptyTask() {
     this._emptyTaskItem = new EmptyTrashTask();
+    this._emptyTaskItem.onDragAndDrop = (evtArgs) => {
+      this.invokeDragAndDropHandlers({
+        draggedElement: evtArgs.draggedElement,
+        movingElement: evtArgs.movingElement,
+        event: evtArgs.event,
+        emptyTaskElemnt: this.emptyTaskElement,
+      });
+    };
     if (this._data.length !== 0) {
       this.hideEmptyTask();
     }
-    this.taskboardListElement.append(this.emptyTaskElement);    
+    this.taskboardListElement.append(this.emptyTaskElement);
   }
 
   constructor(internalName: string, displayName: string, tasks: Array<Task>) {
@@ -52,15 +60,15 @@ export default class TaskboardBacketGroupComponent extends TaskboardGroupCompone
     });
 
     this.onChangingPosition = (movingTask, movingElement) => {
-      if(movingElement.parentElement.childElementCount === 2){
+      if (movingElement.parentElement.childElementCount === 2) {
         this.switchClearButton(false);
       }
     };
-    this.onChangedPosition = (movedTask, movedElement) =>{
-      if(movedElement.parentElement.childElementCount > 1){
+    this.onChangedPosition = (movedTask, movedElement) => {
+      if (movedElement.parentElement.childElementCount > 1) {
         this.switchClearButton(true);
       }
-    }
+    };
   }
 
   switchClearButton(on: boolean) {

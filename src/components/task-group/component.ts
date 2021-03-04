@@ -4,10 +4,21 @@ import {
   EmptyTask,
   TaskboardItem,
 } from "components/task-item";
+import {
+  DragAndDropArguments,
+  DragAndDropHandler,
+} from "components/task-item/component";
 import Task from "models/task";
 import { createElement } from "utils";
 
 import { UIComponent } from "../ui-component";
+
+export class GroupDragAndDropArguments extends DragAndDropArguments {
+  public emptyTaskElemnt: HTMLElement;
+}
+
+export type GroupDragAndDropHandler = (evtArgs: GroupDragAndDropArguments) => void;
+
 
 export default class TaskboardGroupComponent extends UIComponent {
   _data: Array<Task>;
@@ -18,6 +29,7 @@ export default class TaskboardGroupComponent extends UIComponent {
 
   _changingPositionHandlers: Array<ChangingPositionHandler> = [];
   _changedPositionHandlers: Array<ChangedPositionHandler> = [];
+  _tasksDragAndDropHandlers: Array<GroupDragAndDropHandler> = [];
 
   set onChangingPosition(value: ChangingPositionHandler) {
     this._changingPositionHandlers.push(value);
@@ -25,6 +37,10 @@ export default class TaskboardGroupComponent extends UIComponent {
 
   set onChangedPosition(value: ChangedPositionHandler) {
     this._changedPositionHandlers.push(value);
+  }
+
+  set onTasksDragAndDrop(value: GroupDragAndDropHandler) {
+    this._tasksDragAndDropHandlers.push(value);
   }
 
   get internalName(): string {
@@ -35,14 +51,19 @@ export default class TaskboardGroupComponent extends UIComponent {
     return this.element.querySelector(".taskboard__list");
   }
 
-  private invokeChangingPositionHandlers(task: Task, taskEl: HTMLElement) {
+  protected invokeChangingPositionHandlers(task: Task, taskEl: HTMLElement) {
     this._changingPositionHandlers.map((handler) => {
       handler(task, taskEl);
     });
   }
-  private invokeChangedPositionHandlers(task: Task, taskEl: HTMLElement) {
+  protected invokeChangedPositionHandlers(task: Task, taskEl: HTMLElement) {
     this._changedPositionHandlers.map((handler) => {
       handler(task, taskEl);
+    });
+  }
+  protected invokeDragAndDropHandlers(evtArgs: GroupDragAndDropArguments) {
+    this._tasksDragAndDropHandlers.map((handler) => {
+      handler(evtArgs);
     });
   }
 
@@ -59,6 +80,15 @@ export default class TaskboardGroupComponent extends UIComponent {
 
   addEmptyTask() {
     this._emptyTaskItem = new EmptyTask();
+    this._emptyTaskItem.onDragAndDrop = (evtArgs) =>{            
+      this.invokeDragAndDropHandlers({
+        draggedElement: evtArgs.draggedElement,
+        movingElement: evtArgs.movingElement,
+        event: evtArgs.event,
+        emptyTaskElemnt: this.emptyTaskElement
+      });
+    };
+
     if (this._data.length !== 0) {
       this.hideEmptyTask();
     }
@@ -90,6 +120,15 @@ export default class TaskboardGroupComponent extends UIComponent {
     taskItem.onChangedPosition = (item, taskElement) => {
       this.invokeChangedPositionHandlers(item, taskElement);
     };
+
+    taskItem.onDragAndDrop = (evtArgs) =>{            
+      this.invokeDragAndDropHandlers({
+        draggedElement: evtArgs.draggedElement,
+        movingElement: evtArgs.movingElement,
+        event: evtArgs.event,
+        emptyTaskElemnt: this.emptyTaskElement
+      });
+    }
   }
 
   public addTask(task: Task) {

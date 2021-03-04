@@ -11,12 +11,20 @@ export type ChangedPositionHandler = (
   movedElement: HTMLElement
 ) => void;
 
+export class DragAndDropArguments {
+  public movingElement: HTMLElement;
+  public draggedElement: HTMLElement;
+  public event: DragEvent;
+}
+export type DragAndDropHandler = (evtArgs: DragAndDropArguments) => void;
+
 export default class TaskboardItemComponent extends UIComponent {
   _dataSource: Task;
   _data: Task;
 
   _changingPositionHandlers: Array<ChangingPositionHandler> = [];
   _changedPositionHandlers: Array<ChangedPositionHandler> = [];
+  _dragAndDropHandlers: Array<DragAndDropHandler> = [];
 
   set onChangingPosition(value: ChangingPositionHandler) {
     this._changingPositionHandlers.push(value);
@@ -24,6 +32,10 @@ export default class TaskboardItemComponent extends UIComponent {
 
   set onChangedPosition(value: ChangedPositionHandler) {
     this._changedPositionHandlers.push(value);
+  }
+
+  set onDragAndDrop(value: DragAndDropHandler) {
+    this._dragAndDropHandlers.push(value);
   }
 
   get taskInputElement(): HTMLInputElement {
@@ -42,6 +54,11 @@ export default class TaskboardItemComponent extends UIComponent {
   private invokeChangedPositionHandlers() {
     this._changedPositionHandlers.map((handler) => {
       handler(this._dataSource, <HTMLElement>this.element);
+    });
+  }
+  private invokeDragAndDropHandlers(evtArgs: DragAndDropArguments) {
+    this._dragAndDropHandlers.map((handler) => {
+      handler(evtArgs);
     });
   }
 
@@ -82,51 +99,26 @@ export default class TaskboardItemComponent extends UIComponent {
     (<HTMLElement>this.element).addEventListener(`dragover`, (evt) => {
       evt.preventDefault();
 
-      const activeElement = document.querySelector(
-        `.taskboard__item.task--dragged`
+      const movingElement = <HTMLElement>(
+        document.querySelector(`.taskboard__item.task--dragged`)
       );
 
       const draggedElement = <HTMLElement>evt.target;
 
       const isMoveable =
-        activeElement !== draggedElement &&
+        movingElement !== draggedElement &&
         draggedElement.classList.contains(`taskboard__item`);
 
       if (!isMoveable) {
         return;
       }
 
-      const nextElement = getNextElement(evt.clientY, draggedElement);
-
-      if (
-        (nextElement && activeElement === nextElement.previousElementSibling) ||
-        activeElement === nextElement
-      ) {
-        return;
-      }
-
-      const tasksListElement = draggedElement.parentElement;
-
-      if (activeElement.parentElement !== tasksListElement) {
-        if (activeElement.parentElement.childElementCount === 2) {
-          activeElement.parentElement
-            .querySelector(".task--empty")
-            .classList.remove("hidden-block");
-        }
-        if (tasksListElement.childElementCount === 1) {
-          tasksListElement
-            .querySelector(".task--empty")
-            .classList.add("hidden-block");
-        }
-
-        const nextTaskGroup = getTaskGroup(tasksListElement);
-        const activeTaskGroup = getTaskGroup(activeElement.parentElement);
-        activeElement.classList.replace(
-          `task--${activeTaskGroup}`,
-          `task--${nextTaskGroup}`
-        );
-      }
-      tasksListElement.insertBefore(activeElement, nextElement);
+      this.invokeDragAndDropHandlers({
+        movingElement,
+        draggedElement,
+        event: evt
+      });
+      
     });
 
     if (this.taskInputElement) {
