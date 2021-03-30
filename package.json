@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/Musisimaru/skills-kanban-board#readme",
   "devDependencies": {
+    "rollup": "^2.44.0",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-typescript2": "^0.30.0",
     "tslib": "^2.1.0",
